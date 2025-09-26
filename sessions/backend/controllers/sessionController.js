@@ -1,14 +1,17 @@
 
-app.use(session({
-  secret:"Your_Secret_Key",
-  resave:true,
-  saveUninitialized:true
-}))
-app.get("/",(req,res)=>{
+
+const Save=async(req,res)=>{
   req.session.myname="shivani";
   res.send("okk")
-})
-app.get("/display",(req,res)=>{
+}
+
+
+const Display=async(req,res)=>{
   var myname=req.session.myname;
   res.send(myname);
-})
+}
+
+module.exports={
+   Save,
+    Display
+}
