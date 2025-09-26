@@ -1,13 +1,13 @@
 
 const express=require("express");
 const app=express();
-const mailerRoute=require("./routes/mailerRoute")
+const mailerRoute=require("./routes/mailerRoutes")
 const mongoose=require("mongoose")
 const bodyparser = require('body-parser')
 
 require("dotenv").config();
 const cors=require("cors")
-// const nodemailer=require("nodemailer")
+
 
 // Body-parser middleware
 app.use(bodyparser.urlencoded({ extended: true }))
