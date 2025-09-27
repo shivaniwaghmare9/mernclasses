@@ -1,9 +1,10 @@
+// routes/testRoutes.js
+const express = require("express");
+const router = express.Router();
+const sessionController= require("../controllers/sessionController");
 
-const express=require("express");
-const route=express.Router();
-const sessionController=require("../controllers/sessionController");
+// Routes
+router.get("/", sessionController.Home);
+router.get("/display", sessionController.Display);
 
-
-route.get("/save" ,sessionController.Save);
-route.get("/display" ,sessionController.Display);
-moodule.express=route
+module.exports = router;

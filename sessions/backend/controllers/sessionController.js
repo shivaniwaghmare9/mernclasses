@@ -1,17 +1,14 @@
+// controllers/sessionController.js
+const Home = (req, res) => {
+  req.session.myname = "shivani";
+  res.send("okk");
+};
 
-
-const Save=async(req,res)=>{
-  req.session.myname="shivani";
-  res.send("okk")
-}
-
-
-const Display=async(req,res)=>{
-  var myname=req.session.myname;
-  res.send(myname);
-}
-
+const Display = (req, res) => {
+  const myname = req.session.myname;
+  res.send(myname || "No session found!");
+};
 module.exports={
-   Save,
+    Home,
     Display
 }

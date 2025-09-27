@@ -1,38 +1,42 @@
+//=============================================SESSION===========================================================================
 
-// //=============================================SESSION===========================================================================
 
-
-const express=require("express");
-const app=express();
-const mongoose=require("mongoose")
-const bodyparser = require('body-parser')
-const session=require("express-session")
+// server.js
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyparser = require("body-parser");
+const session = require("express-session");
 require("dotenv").config();
-const sessionRoutes=require("./routes/sessionRoutes")
-const cors=require("cors")
+const cors = require("cors");
 
-// Body-parser middleware
-app.use(bodyparser.urlencoded({ extended: true }))
-app.use(bodyparser.json())
-app.use(cors({origin:"http://localhost:5173",credentials:true}));
+// App
+const app = express();
 
+// Middleware
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
+app.use(cors({
+  origin: ["http://localhost:5173", "http://localhost:5174"],
+  credentials: true
+}));
 
-app.use("/",sessionRoutes);
+// Session
 app.use(session({
-  secret:"Your_Secret_Key",
-  resave:true,
-  saveUninitialized:true
-}))
+  secret: "Your_Secret_Key",
+  resave: true,
+  saveUninitialized: true
+}));
 
-mongoose.connect(process.env.DBCON).then(()=>{
-  console.log("Database successfully Connected!!!");
-})
+// DB Connection
+mongoose.connect(process.env.DBCON)
+  .then(() => console.log("Database successfully Connected!!!"))
+  .catch(err => console.log(err));
 
+// Routes
+const sessionRoutes = require("./routes/sessionRoutes");
+app.use("/", sessionRoutes);
 
-
-const Port=process.env.PORT ||5000
-
-
-app.listen(Port,()=>{
-    console.log(`Server is running on port ${Port}`)
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
