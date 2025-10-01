@@ -85,10 +85,12 @@
 //   http.createServer((req, res) => {
 //     res.writeHead(200);
 //     res.end(`Handled by worker process PID: ${process.pid}\n`);
-//   }).listen(3000);
+//   }).listen(5000);
 //   console.log(`Worker process PID: ${process.pid} is running`);
 // }
 
+
+//============================================express========================================================================================
 const cluster = require('cluster');
 const os = require('os');
 const express = require('express');
@@ -110,7 +112,7 @@ if (cluster.isMaster) {
   app.get('/', (req, res) => {
     res.send(`Hello from worker process PID: ${process.pid}`);
   });
-  app.listen(3000, () => {
+  app.listen(5000, () => {
     console.log(`Worker process PID: ${process.pid} is running`);
   });
 }
