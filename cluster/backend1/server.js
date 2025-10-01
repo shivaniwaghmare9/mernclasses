@@ -91,28 +91,61 @@
 
 
 //============================================express========================================================================================
+// const cluster = require('cluster');
+// const os = require('os');
+// const express = require('express');
+
+// if (cluster.isMaster) {
+//   const numCPUs = os.cpus().length;
+//   console.log(`Master process PID: ${process.pid}`);
+//   console.log(`Forking ${numCPUs} workers...`);
+//   // Fork workers
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`Worker ${worker.process.pid} died. Forking a new worker...`);
+//     cluster.fork();
+//   });
+// } else {
+//   const app = express();
+//   app.get('/', (req, res) => {
+//     res.send(`Hello from worker process PID: ${process.pid}`);
+//   });
+//   app.listen(5000, () => {
+//     console.log(`Worker process PID: ${process.pid} is running`);
+//   });
+// }
+
+//======================================AADD CLUSTER MODULE===========================================================
+
 const cluster = require('cluster');
+const http = require('http');
 const os = require('os');
-const express = require('express');
+
+const numCPUs = os.cpus().length;           // Number of CPU cores
 
 if (cluster.isMaster) {
-  const numCPUs = os.cpus().length;
   console.log(`Master process PID: ${process.pid}`);
-  console.log(`Forking ${numCPUs} workers...`);
+  console.log(`Forking ${numCPUs} workers...\n`);
+
   // Fork workers
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
+
+// Listen for dying workers
   cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died. Forking a new worker...`);
-    cluster.fork();
+    console.log(`Worker ${worker.process.pid} died. Restarting...`);
+    cluster.fork(); // Restart a new worker
   });
+
 } else {
-  const app = express();
-  app.get('/', (req, res) => {
-    res.send(`Hello from worker process PID: ${process.pid}`);
-  });
-  app.listen(5000, () => {
-    console.log(`Worker process PID: ${process.pid} is running`);
+  // Worker processes
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end(`Hello from Worker PID: ${process.pid}`);
+  }).listen(3000, () => {
+    console.log(`Worker PID: ${process.pid} started`);
   });
 }
