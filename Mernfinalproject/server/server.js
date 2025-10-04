@@ -17,5 +17,9 @@ app.use(bodyparser.json())
 
 
 app.use("/doctor", doctorRoute);
+const Port=process.env.PORT || 8000
 
-app.listen(8000, () => console.log("Server running on port 8000"))
+app.listen(Port, () => {
+    console.log(`Server running on port 8000 Port ${Port}`);
+}
+)
