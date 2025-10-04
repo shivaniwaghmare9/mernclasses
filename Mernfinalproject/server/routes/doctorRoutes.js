@@ -1,13 +1,14 @@
-
 const express = require("express");
-const router = express.Router();
-const upload = require("../middleware/uploadMiddleware");
-const { doctorSave, doctorLogin } = require("../controllers/doctorController");
+const route = express.Router();
+const doctorController= require("../controllers/doctorController");
+const uploadMiddleware = require("../middleware/uploadMiddleware");
 
-// route for registration (with file upload)
-router.post("/doctorsave", upload.single("file"), doctorSave);
 
-// login
-router.post("/doctorlogin", doctorLogin);
+route.post("/doctorsave", uploadMiddleware.upload.single("file"),  doctorController.doctorSave);
 
-module.exports = router;
+route.post("/doctorlogin", doctorController.doctorLogin);
+
+
+
+
+module.exports= route;
