@@ -1,11 +1,11 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Modal, Form, Navbar, Nav, Container, FormControl, NavDropdown } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import docimg from "../images/doctor.jpeg";
-import mainheading from "../images/mainheading.png";
+import docimg from "../images/doctor.png";
+// import mainheading from "../images/mainheading.png";
 import "../styles/Header.css";
 
 const Header = () => {
@@ -80,7 +80,7 @@ const Header = () => {
         <Container>
           <Navbar.Brand href="/">
             <img src={docimg} alt="Logo" className="logo-img" />
-            <img src={mainheading} alt="Heading" className="heading-img ms-2" />
+            {/* <img src={mainheading} alt="Heading" className="heading-img ms-2" /> */}
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
