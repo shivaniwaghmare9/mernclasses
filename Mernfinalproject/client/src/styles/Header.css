@@ -1,0 +1,15 @@
+
+.logo-img {
+  height: 50px;
+  width: auto;
+}
+.heading-img {
+  height: 40px;
+  width: auto;
+}
+
+@media (max-width: 576px) {
+  .heading-img {
+    display: none;
+  }
+}
