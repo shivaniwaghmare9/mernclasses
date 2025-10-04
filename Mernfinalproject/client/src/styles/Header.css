@@ -22,11 +22,6 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-brand img {
-  height: 50px;
-  width: auto;
-}
-
 .navbar-nav .nav-link {
   color: #fff !important;
   font-weight: 500;
@@ -89,7 +84,7 @@ body {
   color: #fff;
 }
 
-/* Modal Customization */
+/* Modal */
 .modal-header {
   background: linear-gradient(90deg, #00dfd8 0%, #007cf0 100%);
   color: white;
@@ -114,12 +109,12 @@ body {
   margin-bottom: 10px;
 }
 
-/* Toast Container */
+/* Toastify */
 .Toastify__toast {
   border-radius: 10px !important;
 }
 
-/* Responsive Adjustments */
+/* Responsive */
 @media (max-width: 768px) {
   .navbar-nav {
     text-align: center;
