@@ -1,29 +1,21 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const doctorRoutes = require("./routes/doctorRoutes");
-const path = require("path");
-
 require("dotenv").config();
-
+const cors = require("cors");
+const mongoose = require("mongoose");
+const bodyparser = require('body-parser')
+const doctorRoute = require("./routes/doctorRoute");
 const app = express();
-
 app.use(cors());
-app.use(express.json());
-// to serve uploaded files (if needed)
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-const PORT = process.env.PORT || 5000;
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect(process.env.DBCON).then(()=>{
+  console.log("Database Succesfully Connected!");
 })
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.error(err));
 
-app.use("/api/doctor", doctorRoutes);
+// Body-parser middleware
+app.use(bodyparser.urlencoded({ extended: true }))
+app.use(bodyparser.json())
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+app.use("/doctor", doctorRoute);
+
+app.listen(8000, () => console.log("Server running on port 8000"))
