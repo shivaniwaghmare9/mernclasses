@@ -95,7 +95,22 @@
 }
 
 /* ================= MODALS ================= */
+.modal-header {
+  background-color: #e0f7fa; /* Light blue background */
+  border-bottom: none;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  padding: 1.2rem 1.5rem;
+}
+
 .modal-title {
+  color: #0288D1;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.modal-title {
+ 
   color: #0288D1;
   font-weight: 600;
 }
