@@ -1,21 +1,28 @@
-/* Navbar Container */
+/* ---------- NAVBAR STYLING ---------- */
 .custom-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #0288D1; /* medical blue */
+  background-color: #0288D1; /* Light Blue - Medical theme */
   padding: 1rem 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  position: sticky;
+  top: 0;
 }
 
-/* Logo Styling */
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
 .nav-logo {
   height: 50px;
   object-fit: contain;
 }
 
-/* Center Search Input */
+/* ---------- SEARCH BAR STYLING ---------- */
 .nav-center {
   flex: 1;
   display: flex;
@@ -26,58 +33,63 @@
 .search-input {
   width: 100%;
   max-width: 400px;
-  padding: 8px 16px;
-  border-radius: 25px;
+  padding: 10px 20px;
+  border-radius: 50px;
   border: none;
   outline: none;
-  font-size: 1rem;
+  font-size: 16px;
   transition: box-shadow 0.3s ease;
 }
 
 .search-input:focus {
-  box-shadow: 0 0 0 2px white;
+  box-shadow: 0 0 0 3px #ffffff;
 }
 
-/* Right Section (Buttons) */
+/* ---------- BUTTONS ---------- */
 .nav-right {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-/* Button Styling */
 .nav-btn {
-  border-radius: 25px !important;
-  padding: 6px 20px !important;
+  border-radius: 30px !important;
+  padding: 8px 20px !important;
   font-weight: 500;
   background-color: transparent !important;
-  border: 1px solid white !important;
+  border: 2px solid white !important;
   color: white !important;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
 }
 
 .nav-btn:hover {
   background-color: white !important;
   color: #0288D1 !important;
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Register Button - Light Theme */
 .register-btn {
   background-color: white !important;
   color: #0288D1 !important;
-  border: 1px solid #fff !important;
+  border: 2px solid white !important;
 }
 
 .register-btn:hover {
-  background-color: #fff !important;
+  background-color: #ffffff !important;
   color: #01579b !important;
   transform: scale(1.05);
 }
 
-/* Responsive Adjustments */
+/* ---------- MODAL STYLING (OPTIONAL) ---------- */
+.modal-title {
+  color: #0288D1;
+  font-weight: 600;
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
 @media screen and (max-width: 768px) {
   .custom-navbar {
     flex-direction: column;
@@ -90,12 +102,12 @@
     margin: 1rem 0;
   }
 
+  .search-input {
+    width: 100%;
+  }
+
   .nav-right {
     width: 100%;
     justify-content: flex-start;
-  }
-
-  .search-input {
-    width: 100%;
   }
 }
