@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import backendUrl from "../utils/backendUrl";
-import '..styles/Header.css'; // ✅ Add custom styles here
+import "../styles/Header.css" // ✅ Add custom styles here
 
 const Header = () => {
   const [input, setInput] = useState({});
@@ -78,23 +78,27 @@ const Header = () => {
     <>
       {/* ✅ Modern Navbar */}
       <nav className="custom-navbar">
-        <div className="nav-left">
-          <img src={mainheading} alt="logo" className="nav-logo" />
-        </div>
-        <div className="nav-center">
-          <input
-            type="text"
-            placeholder="Search doctors, specialities..."
-            className="search-input"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="nav-right">
-          <Button variant="outline-light" className="nav-btn" onClick={handleShow1}>Login</Button>
-          <Button variant="light" className="nav-btn register-btn" onClick={handleShow}>Register</Button>
-        </div>
-      </nav>
+  <div className="nav-left">
+    <img src={mainheading} alt="logo" className="nav-logo" />
+  </div>
+  <div className="nav-center">
+    <input
+      type="text"
+      placeholder="Search doctors, specialties..."
+      className="search-input"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+    <Button variant="outline-light" className="search-btn">
+      Search
+    </Button>
+  </div>
+  <div className="nav-right">
+    <Button variant="outline-light" className="nav-btn" onClick={handleShow1}>Login</Button>
+    <Button variant="light" className="nav-btn register-btn" onClick={handleShow}>Register</Button>
+  </div>
+</nav>
+
 
       {/* ✅ Registration Modal */}
       <Modal show={show} onHide={handleClose}>
