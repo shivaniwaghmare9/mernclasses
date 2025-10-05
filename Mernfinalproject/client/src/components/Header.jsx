@@ -1,202 +1,179 @@
-
-import { useState } from "react";
-import { Button, Modal, Form, Navbar, Nav, Container, FormControl, NavDropdown } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import mainheading from "../images/doctor.png";
+import Button from 'react-bootstrap/Button';
+import { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import docimg from "../images/doctor.png";
-// import mainheading from "../images/mainheading.png";
-import "../styles/Header.css";
+import backendUrl from "../utils/backendUrl";
+import '..styles/Header.css'; // ✅ Add custom styles here
 
 const Header = () => {
-  const [regInput, setRegInput] = useState({});
-  const [image, setImage] = useState(null);
-  const [showReg, setShowReg] = useState(false);
+  const [input, setInput] = useState({});
+  const [image, setImage] = useState("");
+  const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
+  const [email1, setEmail1] = useState("");
+  const [password1, setPassword1] = useState("");
+  const [search, setSearch] = useState("");
 
-  const [emailLogin, setEmailLogin] = useState("");
-  const [passwordLogin, setPasswordLogin] = useState("");
-  const [showLogin, setShowLogin] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleClose1 = () => setShow1(false);
+  const handleShow = () => setShow(true);
+  const handleShow1 = () => setShow1(true);
 
   const navigate = useNavigate();
 
-  const handleRegInput = (e) => {
-    const { name, value } = e.target;
-    setRegInput((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleImageChange = (e) => {
+  const handleImage = (e) => {
     setImage(e.target.files[0]);
-  };
+  }
 
-  const submitRegistration = async (e) => {
+  const handleInput = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setInput(values => ({ ...values, [name]: value }));
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const api = `${import.meta.env.VITE_API_URL}/doctor/doctorsave`;
-    if (!image) {
-      toast.error("Please select an image");
-      return;
-    }
+    let api = `${backendUrl}/doctor/doctorsave`;
+    if (!image) return alert("Please select a Image");
+
     const formData = new FormData();
     formData.append("file", image);
-    for (const key in regInput) {
-      formData.append(key, regInput[key]);
+    for (let x in input) {
+      formData.append(x, input[x]);
     }
+
     try {
       const res = await axios.post(api, formData, {
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(res.data);
-      setShowReg(false);
-      toast.success("Registered successfully!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Registration failed");
-    }
-  };
 
-  const submitLogin = async (e) => {
-    e.preventDefault();
-    const api = `${import.meta.env.VITE_API_URL}/doctor/doctorlogin`;
-    try {
-      const res = await axios.post(api, { email: emailLogin, password: passwordLogin });
-      console.log(res.data);
-      if (res.data.success) {
-        const doc = res.data.doctor;
-        localStorage.setItem("docname", doc.doctorname);
-        localStorage.setItem("docid", doc._id);
-        navigate("/doctordashboard");
-        setShowLogin(false);
-      } else {
-        toast.error(res.data.msg || "Login failed");
-      }
+      console.log(res);
+      setShow(false);
+      toast.info("You are Successfully Registered!");
+
     } catch (err) {
       console.error(err);
-      toast.error("Login error");
     }
-  };
+  }
+
+  const handleSubmit1 = async (e) => {
+    e.preventDefault();
+    let api = `${backendUrl}/doctor/doctorlogin`;
+    try {
+      const response = await axios.post(api, { email: email1, password: password1 });
+      localStorage.setItem("docname", response.data.doctorname);
+      localStorage.setItem("docid", response.data._id);
+      navigate("/doctordashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
-      <Navbar bg="light" expand="lg" className="shadow-sm">
-        <Container>
-          <Navbar.Brand href="/">
-            <img src={docimg} alt="Logo" className="logo-img" />
-            {/* <img src={mainheading} alt="Heading" className="heading-img ms-2" /> */}
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/about">About</Nav.Link>
-            </Nav>
-            <Form className="d-flex me-3">
-              <FormControl
-                type="search"
-                placeholder="Search doctors, speciality..."
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success">Search</Button>
-            </Form>
-            <Nav>
-              <Button variant="primary" className="me-2" onClick={() => setShowLogin(true)}>
-                Login
-              </Button>
-              <Button variant="secondary" onClick={() => setShowReg(true)}>
-                Register
-              </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      {/* ✅ Modern Navbar */}
+      <nav className="custom-navbar">
+        <div className="nav-left">
+          <img src={mainheading} alt="logo" className="nav-logo" />
+        </div>
+        <div className="nav-center">
+          <input
+            type="text"
+            placeholder="Search doctors, specialities..."
+            className="search-input"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="nav-right">
+          <Button variant="outline-light" className="nav-btn" onClick={handleShow1}>Login</Button>
+          <Button variant="light" className="nav-btn register-btn" onClick={handleShow}>Register</Button>
+        </div>
+      </nav>
 
-      {/* Registration Modal */}
-      <Modal show={showReg} onHide={() => setShowReg(false)}>
+      {/* ✅ Registration Modal */}
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Doctor Registration</Modal.Title>
+          <Modal.Title>Doctor Registration Form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={submitRegistration}>
+          <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control name="name" type="text" onChange={handleRegInput} required />
+              <Form.Label>Enter Doctor Name</Form.Label>
+              <Form.Control type="text" name="name" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Specialization</Form.Label>
-              <Form.Select name="speciality" onChange={handleRegInput} required>
-                <option value="">Select specialization</option>
+              <Form.Label>Select Specialization</Form.Label>
+              <Form.Select name="speciality" onChange={handleInput}>
+                <option>Open this select menu</option>
                 <option value="Cardiologist">Cardiologist</option>
                 <option value="Gastroenterologist">Gastroenterologist</option>
                 <option value="Neurologist">Neurologist</option>
+                <option value="Radiologist">Radiologist</option>
                 <option value="General Physician">General Physician</option>
-                {/* add more */}
+                <option value="ENT Specialist">ENT Specialist</option>
+                <option value="Dentist">Dentist</option>
+                <option value="Gynecologist">Gynecologist</option>
+                <option value="Surgeon">Surgeon</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>City</Form.Label>
-              <Form.Control name="city" type="text" onChange={handleRegInput} />
+              <Form.Label>Enter City</Form.Label>
+              <Form.Control type="text" name="city" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Address</Form.Label>
-              <Form.Control name="address" type="text" onChange={handleRegInput} />
+              <Form.Label>Clinic Address</Form.Label>
+              <Form.Control type="text" name="address" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Contact</Form.Label>
-              <Form.Control name="contact" type="text" onChange={handleRegInput} />
+              <Form.Label>Upload Doctor Image</Form.Label>
+              <Form.Control type="file" name="file" onChange={handleImage} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Contact Number</Form.Label>
+              <Form.Control type="text" name="contact" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control name="email" type="email" onChange={handleRegInput} required />
+              <Form.Control type="text" name="email" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control name="password" type="password" onChange={handleRegInput} required />
+              <Form.Control type="password" name="password" onChange={handleInput} />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Upload Image</Form.Label>
-              <Form.Control type="file" accept="image/*" onChange={handleImageChange} required />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Register
-            </Button>
+            <Button variant="primary" onClick={handleSubmit} type="submit">Submit</Button>
           </Form>
         </Modal.Body>
       </Modal>
 
-      {/* Login Modal */}
-      <Modal show={showLogin} onHide={() => setShowLogin(false)}>
+      {/* ✅ Login Modal */}
+      <Modal show={show1} onHide={handleClose1}>
         <Modal.Header closeButton>
-          <Modal.Title>Doctor Login</Modal.Title>
+          <Modal.Title>Doctor Login Form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={submitLogin}>
+          <Form>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={emailLogin}
-                onChange={(e) => setEmailLogin(e.target.value)}
-                required
-              />
+              <Form.Control type="email" value={email1} onChange={(e) => setEmail1(e.target.value)} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={passwordLogin}
-                onChange={(e) => setPasswordLogin(e.target.value)}
-                required
-              />
+              <Form.Control type="password" value={password1} onChange={(e) => setPassword1(e.target.value)} />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Login
-            </Button>
+            <Button variant="primary" onClick={handleSubmit1} type="submit">Login</Button>
           </Form>
         </Modal.Body>
       </Modal>
 
-      <ToastContainer position="top-center" />
+      <ToastContainer />
     </>
-  );
-};
+  )
+}
 
 export default Header;
