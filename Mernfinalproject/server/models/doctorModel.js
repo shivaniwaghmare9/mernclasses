@@ -1,17 +1,41 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-const doctorSchema = new mongoose.Schema({
-  doctorname: { type: String, required: true },
-  speciality: { type: String },
-  city: { type: String },
-  address: { type: String },
-  image: { type: String },
-  contact: { type: String },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-}, {
-  timestamps: true,
-});
+const doctorSchema = new  mongoose.Schema(
+    {
+        doctorname: {
+            type: String,
+            required: true,
+        }, 
+        speciality: {
+            type: String,
+            required: true,
+        },
+         city: {
+            type: String,
+            required: true,
+        },
+         address: {
+            type: String,
+            required: true,
+        },
+         image: {
+            type: String,
+            required: true,
+        },
+         contact: {
+            type: String,
+            required: true,
+        },
+         email: {
+            type: String,
+            required: true,
+        },
+         password: {
+            type: String,
+            required: true,
+        }
+        
+    }, {timestamps: true}
+)
 
-const Doctor = mongoose.model("Doctor", doctorSchema);
-module.exports = Doctor;
+module.exports = mongoose.model('doctor', doctorSchema)
