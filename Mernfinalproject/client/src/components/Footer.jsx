@@ -1,6 +1,6 @@
 
 
-
+import "../styles/Footer.jsx";
 const Footer = () => {
   return (
     <footer className="bg-blue-600 text-white mt-20">
