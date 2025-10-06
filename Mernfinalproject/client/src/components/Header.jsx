@@ -1,14 +1,14 @@
-import mainheading from "../images/doctor.png";
-import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+// Header.jsx
+
+import React, { useState } from "react";
+import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import backendUrl from "../utils/backendUrl";
+import "react-toastify/dist/ReactToastify.css";
 import "../styles/Header.css";
+import mainheading from "../images/doctor.png";
+import backendUrl from "../utils/backendUrl";
 
 const Header = () => {
   const [input, setInput] = useState({});
@@ -18,12 +18,7 @@ const Header = () => {
   const [email1, setEmail1] = useState("");
   const [password1, setPassword1] = useState("");
   const [search, setSearch] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false); // for responsive menu
-
-  const handleClose = () => setShow(false);
-  const handleClose1 = () => setShow1(false);
-  const handleShow = () => setShow(true);
-  const handleShow1 = () => setShow1(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -33,7 +28,7 @@ const Header = () => {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setInput(values => ({ ...values, [name]: value }));
+    setInput((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -43,96 +38,92 @@ const Header = () => {
     const api = `${backendUrl}/doctor/doctorsave`;
     const formData = new FormData();
     formData.append("file", image);
-    for (let key in input) {
-      formData.append(key, input[key]);
-    }
+    Object.keys(input).forEach((key) => formData.append(key, input[key]));
 
     try {
       await axios.post(api, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setShow(false);
-      toast.info("You are successfully registered!");
+      toast.success("Registration successful!");
     } catch (err) {
       console.error(err);
+      toast.error("Registration failed.");
     }
   };
 
-  const handleSubmit1 = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const api = `${backendUrl}/doctor/doctorlogin`;
-      const response = await axios.post(api, { email: email1, password: password1 });
-      localStorage.setItem("docname", response.data.doctorname);
-      localStorage.setItem("docid", response.data._id);
+      const res = await axios.post(api, { email: email1, password: password1 });
+      localStorage.setItem("docname", res.data.doctorname);
+      localStorage.setItem("docid", res.data._id);
       navigate("/doctordashboard");
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      toast.error("Login failed!");
     }
   };
 
   return (
     <>
-      {/* ✅ Navbar with hamburger */}
-      <nav className="custom-navbar">
-        <div className="nav-left">
-          <img src={mainheading} alt="logo" className="nav-logo" />
+      <nav className="navbar">
+        <div className="navbar-left">
+          <img src={mainheading} alt="logo" className="navbar-logo" />
+          <h1 className="navbar-brand">MediCare</h1>
         </div>
 
-        {/* ☰ Hamburger Icon */}
-        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          <div className={`bar ${menuOpen ? "open" : ""}`}></div>
-          <div className={`bar ${menuOpen ? "open" : ""}`}></div>
-          <div className={`bar ${menuOpen ? "open" : ""}`}></div>
+        <div className={`navbar-links ${menuOpen ? "active" : ""}`}>
+          <a href="/">Home</a>
+          <a href="/doctors">Doctors</a>
+          <a href="/appointments">Appointments</a>
+          <a href="/contact">Contact</a>
         </div>
 
-        {/* Search Bar */}
-        <div className={`nav-center ${menuOpen ? "show" : ""}`}>
+        <div className={`navbar-actions ${menuOpen ? "active" : ""}`}>
           <input
             type="text"
-            placeholder="Search doctors, specialties..."
-            className="search-input"
+            placeholder="Search doctors..."
+            className="navbar-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button variant="outline-light" className="search-btn">Search</Button>
+          <Button variant="outline-light" onClick={() => setShow1(true)} className="nav-btn">Login</Button>
+          <Button variant="light" onClick={() => setShow(true)} className="nav-btn register-btn">Register</Button>
         </div>
 
-        {/* Login/Register Buttons */}
-        <div className={`nav-right ${menuOpen ? "show" : ""}`}>
-          <Button variant="outline-light" className="nav-btn" onClick={handleShow1}>Login</Button>
-          <Button variant="light" className="nav-btn register-btn" onClick={handleShow}>Register</Button>
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          <span className={`bar ${menuOpen ? "open" : ""}`}></span>
+          <span className={`bar ${menuOpen ? "open" : ""}`}></span>
+          <span className={`bar ${menuOpen ? "open" : ""}`}></span>
         </div>
       </nav>
 
-      {/* ✅ Registration Modal */}
-      <Modal show={show} onHide={handleClose}>
+      {/* Registration Modal */}
+      <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Doctor Registration Form</Modal.Title>
+          <Modal.Title>Doctor Registration</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Enter Doctor Name</Form.Label>
+              <Form.Label>Doctor Name</Form.Label>
               <Form.Control type="text" name="name" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Select Specialization</Form.Label>
+              <Form.Label>Specialization</Form.Label>
               <Form.Select name="speciality" onChange={handleInput}>
-                <option>Open this select menu</option>
+                <option>Select specialization</option>
                 <option value="Cardiologist">Cardiologist</option>
-                <option value="Gastroenterologist">Gastroenterologist</option>
-                <option value="Neurologist">Neurologist</option>
-                <option value="Radiologist">Radiologist</option>
-                <option value="General Physician">General Physician</option>
-                <option value="ENT Specialist">ENT Specialist</option>
                 <option value="Dentist">Dentist</option>
+                <option value="Neurologist">Neurologist</option>
                 <option value="Gynecologist">Gynecologist</option>
-                <option value="Surgeon">Surgeon</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Enter City</Form.Label>
+              <Form.Label>City</Form.Label>
               <Form.Control type="text" name="city" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -140,11 +131,11 @@ const Header = () => {
               <Form.Control type="text" name="address" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Upload Doctor Image</Form.Label>
-              <Form.Control type="file" name="file" onChange={handleImage} />
+              <Form.Label>Doctor Image</Form.Label>
+              <Form.Control type="file" onChange={handleImage} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Contact Number</Form.Label>
+              <Form.Label>Contact</Form.Label>
               <Form.Control type="text" name="contact" onChange={handleInput} />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -155,18 +146,18 @@ const Header = () => {
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" name="password" onChange={handleInput} />
             </Form.Group>
-            <Button variant="primary" type="submit">Submit</Button>
+            <Button variant="primary" type="submit">Register</Button>
           </Form>
         </Modal.Body>
       </Modal>
 
-      {/* ✅ Login Modal */}
-      <Modal show={show1} onHide={handleClose1}>
+      {/* Login Modal */}
+      <Modal show={show1} onHide={() => setShow1(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Doctor Login Form</Modal.Title>
+          <Modal.Title>Doctor Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit1}>
+          <Form onSubmit={handleLogin}>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" value={email1} onChange={(e) => setEmail1(e.target.value)} />
