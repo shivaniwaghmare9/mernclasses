@@ -1,5 +1,4 @@
-// Header.jsx
-
+// src/components/Header.jsx
 import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
@@ -33,7 +32,7 @@ const Header = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!image) return alert("Please select an image");
+    if (!image) return toast.warn("Please select an image");
 
     const api = `${backendUrl}/doctor/doctorsave`;
     const formData = new FormData();
@@ -45,7 +44,7 @@ const Header = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setShow(false);
-      toast.success("Registration successful!");
+      toast.success("Doctor registered successfully!");
     } catch (err) {
       console.error(err);
       toast.error("Registration failed.");
