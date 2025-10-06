@@ -148,6 +148,10 @@ const Header = () => {
             <Button variant="primary" type="submit">Register</Button>
           </Form>
         </Modal.Body>
+
+<Modal.Footer>
+  <Button variant="secondary" onClick={() => setShow(false)}>Cancel</Button>
+</Modal.Footer>
       </Modal>
 
       {/* Login Modal */}
@@ -168,6 +172,10 @@ const Header = () => {
             <Button variant="primary" type="submit">Login</Button>
           </Form>
         </Modal.Body>
+
+        <Modal.Footer>
+  <Button variant="secondary" onClick={() => setShow1(false)}>Cancel</Button>
+</Modal.Footer>
       </Modal>
 
       <ToastContainer />
